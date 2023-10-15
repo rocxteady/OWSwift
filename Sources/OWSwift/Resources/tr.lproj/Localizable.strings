@@ -1,0 +1,9 @@
+/* 
+  Localizable.strings
+  
+
+  Created by Ulaş Sancak on 15.10.2023.
+
+*/
+
+"OWSwiftError.notInitialized" = "OWSwift initialized edilmedi. OWSwift.initialize(with:) fonksiyonunu kullanarak initialize edin.";

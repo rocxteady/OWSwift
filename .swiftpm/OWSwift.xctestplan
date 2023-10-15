@@ -1,0 +1,32 @@
+{
+  "configurations" : [
+    {
+      "id" : "B6D8EC31-D275-4ED5-B2AB-A8CA909B16C7",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:",
+          "identifier" : "OWSwift",
+          "name" : "OWSwift"
+        }
+      ]
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "OWSwiftTests",
+        "name" : "OWSwiftTests"
+      }
+    }
+  ],
+  "version" : 1
+}
