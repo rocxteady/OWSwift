@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/rocxteady/Resting.git",
       "state" : {
-        "revision" : "62e73161df2af8d0342e9c2ac9337a29c9a721ef",
-        "version" : "0.0.4"
+        "revision" : "8cdc638583a03a51367ce22b58930ab12f034f10",
+        "version" : "0.0.5"
       }
     }
   ],

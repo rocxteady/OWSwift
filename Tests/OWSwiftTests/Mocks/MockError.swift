@@ -13,7 +13,7 @@ enum MockError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .fileNotFound(let string):
-            "File \(string) could not be found."
+            return "File \(string) could not be found."
         }
     }
 }

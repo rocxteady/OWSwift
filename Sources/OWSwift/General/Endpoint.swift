@@ -13,7 +13,7 @@ enum Endpoint: String {
     var fullURL: String {
         switch self {
         case .currentWeather:
-            Constants.API.fullBaseAPIURL + rawValue
+            return Constants.API.fullBaseAPIURL + rawValue
         }
     }
 }

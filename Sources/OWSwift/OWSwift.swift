@@ -9,7 +9,7 @@ public enum OWSwiftError: Error {
     var errorDescription: String {
         switch self {
         case .notInitialized:
-            NSLocalizedString("OWSwiftError.notInitialized", comment: "")
+            return NSLocalizedString("OWSwiftError.notInitialized", comment: "")
         }
     }
 }
