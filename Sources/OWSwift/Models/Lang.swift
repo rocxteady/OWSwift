@@ -58,69 +58,67 @@ enum Lang: String {
 
 extension Locale {
     var lang: Lang? {
-        let identifier = language.minimalIdentifier
         if identifier.hasPrefix("af") {
             return .af
         } else if identifier.hasPrefix("sq") {
             return .al
-        } else if identifier.hasPrefix("ar-") || identifier == "ar" {
+        } else if identifier.hasPrefix("ar_") || identifier == "ar" {
             return .ar
         } else if identifier.hasPrefix("az") {
             return .az
-        } else if identifier == "bg" {
+        } else if identifier.hasPrefix("bg_") || identifier == "bg" {
             return .bg
         } else if identifier.hasPrefix("ca") {
             return .ca
-        } else if identifier == "cs" {
+        } else if identifier.hasPrefix("cs") {
             return .cz
-        } else if identifier.hasPrefix("da-") || identifier == "da" {
+        } else if identifier.hasPrefix("da_") || identifier == "da" {
             return .da
         } else if identifier.hasPrefix("de") {
             return .de
         } else if identifier.hasPrefix("el") {
             return .el
-        } else if identifier == "eu" {
+        } else if identifier.hasPrefix("eu") {
             return .eu
         } else if identifier.hasPrefix("fa") {
             return .fa
-        } else if identifier == "fi" {
+        } else if identifier.hasPrefix("fi") {
             return .fi
         } else if identifier.hasPrefix("fr") {
             return .fr
-        } else if identifier == "gl" {
+        } else if identifier.hasPrefix("gl") {
             return .gl
-        } else if identifier == "he" {
+        } else if identifier.hasPrefix("he"){
             return .he
-        } else if identifier == "hi" {
+        } else if identifier.hasPrefix("hi"){
             return .hi
         } else if identifier.hasPrefix("hr") {
             return .hr
-        } else if identifier == "hu" {
+        } else if identifier.hasPrefix("hu") {
             return .hu
-        } else if identifier == "id" {
+        } else if identifier.hasPrefix("id") {
             return .id
         } else if identifier.hasPrefix("it") {
             return .it
-        } else if identifier == "ja" {
+        } else if identifier.hasPrefix("ja") {
             return .ja
         } else if identifier.hasPrefix("ko-") || identifier == "ko" {
             return .kr
-        } else if identifier == "lv" {
+        } else if identifier.hasPrefix("lv") {
             return .la
-        } else if identifier == "lt" {
+        } else if identifier.hasPrefix("lt") {
             return .lt
-        } else if identifier == "mk" {
+        } else if identifier.hasPrefix("mk") {
             return .mk
         } else if identifier.hasPrefix("nb") {
             return .no
         } else if identifier.hasPrefix("nl") {
             return .nl
-        } else if identifier == "pl" {
+        } else if identifier.hasPrefix("pl") {
             return .pl
+        } else if identifier.hasPrefix("pt_BR") {
+            return .pt_br
         } else if identifier.hasPrefix("pt") {
-            if language.region?.identifier == "BR" {
-                return .pt_br
-            }
             return .pt
         } else if identifier.hasPrefix("ro-") || identifier == "ro" {
             return .ro
@@ -128,36 +126,29 @@ extension Locale {
             return .ru
         } else if identifier.hasPrefix("sv") {
             return .sv
-        } else if identifier == "sk" {
+        } else if identifier.hasPrefix("sk") {
             return .sk
-        } else if identifier == "sl" {
+        } else if identifier.hasPrefix("sl") {
             return .sl
         } else if identifier.hasPrefix("es") {
             return .es
         } else if identifier.hasPrefix("sr") {
             return .sr
-        } else if identifier == "th" {
+        } else if identifier.hasPrefix("th") {
             return .th
         } else if identifier.hasPrefix("se") {
             return .sv
         } else if identifier.hasPrefix("tr-") || identifier == "tr" {
             return .tr
-        } else if identifier == "uk" {
+        } else if identifier.hasPrefix("uk") {
             return .uk
-        } else if identifier == "vi" {
+        } else if identifier.hasPrefix("vi") {
             return .vi
+        } else if identifier.starts(with: "zh_Hant") {
+            return .zh_tw
         } else if identifier.starts(with: "zh") {
-            switch identifier {
-            case "zh-Hant-JP",
-                "zh-Hant-CN",
-                "zh-TW",
-                "zh-HK",
-                "zh-MO":
-                return .zh_tw
-            default:
-                return .zh_cn
-            }
-        } else if identifier == "zu" {
+            return .zh_cn
+        } else if identifier.starts(with: "zu") {
             return .zu
         }
         return .en
