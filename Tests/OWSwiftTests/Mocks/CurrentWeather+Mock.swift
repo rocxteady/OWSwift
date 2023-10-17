@@ -24,7 +24,7 @@ extension CurrentWeather {
             conditions: [
                 WeatherCondition(id: 800, main: "Clear", description: "clear sky", icon: "01d")
             ],
-            mainWeatherInfo: MainWeatherInfo(temp: 21.19, feelsLike: 21.27, tempMin: 21.19, tempMax: 22.61, pressure: 1010, humidity: 73, seaLevel: 1010, grndLevel: 1009),
+            mainWeatherInfo: MainWeatherInfo(temp: 21.19, feelsLike: 21.27, tempMin: 21.19, tempMax: 22.61, pressure: 1010, humidity: 73, seaLevel: 1010, grndLevel: 1009, tempKf: nil),
             visibility: 10000,
             wind: Wind(speed: 4.12, deg: 240, gust: 6.26),
             rain: VolumeLast(the1H: 0.1, the3H: 0.1),

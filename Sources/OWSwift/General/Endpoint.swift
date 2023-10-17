@@ -9,11 +9,11 @@ import Foundation
 
 enum Endpoint: String {
     case currentWeather = "/weather"
+    case forecast = "/forecast"
+    case dailyForecast = "/forecast/daily"
+    case hourlyForecast = "/forecast/hourly"
 
     var fullURL: String {
-        switch self {
-        case .currentWeather:
-            return Constants.API.fullBaseAPIURL + rawValue
-        }
+        return Constants.API.fullBaseAPIURL + rawValue
     }
 }

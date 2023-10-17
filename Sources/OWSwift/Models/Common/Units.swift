@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Units: String {
+public enum Units: String {
     case standard
     case metric
     case imperial

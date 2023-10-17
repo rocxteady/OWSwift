@@ -10,10 +10,6 @@ import Resting
 import Combine
 
 struct CurrentWeatherRepo {
-    private static func createParameters(lat: Double, lon: Double, units: Units? = nil, locale: Locale = .current) -> [String: Any?] {
-        return ["lat": lat, "lon": lon, "units": units, "lang": locale.lang?.rawValue]
-    }
-
     static func getCurrentWeather(lat: Double, lon: Double, units: Units? = nil, locale: Locale = .current) async throws -> CurrentWeather {
         let restClient = RestClient.initialize()
         let parameters = try createParameters(lat: lat, lon: lon, units: units, locale: locale)
@@ -32,5 +28,11 @@ struct CurrentWeatherRepo {
             }
             .switchToLatest()
             .eraseToAnyPublisher()
+    }
+}
+
+extension CurrentWeatherRepo {
+    private static func createParameters(lat: Double, lon: Double, units: Units? = nil, locale: Locale = .current) -> [String: Any?] {
+        return ["lat": lat, "lon": lon, "units": units, "lang": locale.lang?.rawValue]
     }
 }

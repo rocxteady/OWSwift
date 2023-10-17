@@ -8,6 +8,14 @@
 import Foundation
 
 public struct CurrentWeather: Decodable {
+    public struct Sys: Codable {
+        public let country: String?
+        public let sunrise, sunset: Int
+
+        let type, id: Int?
+        let message: String?
+    }
+    
     public let coord: Coord
     public let conditions: [WeatherCondition]
     public let mainWeatherInfo: MainWeatherInfo
@@ -17,6 +25,7 @@ public struct CurrentWeather: Decodable {
     public let snow: VolumeLast?
     public let clouds: Clouds
     public let dt: Int
+    public let date: Date
     public let sys: Sys
     public let timezone, cityId: Int
     public let cityName: String
@@ -34,60 +43,49 @@ public struct CurrentWeather: Decodable {
         case cityName = "name"
         case base, cod
     }
-}
 
-public struct Clouds: Codable {
-    public let all: Int
-}
+    public init(coord: Coord, conditions: [WeatherCondition], mainWeatherInfo: MainWeatherInfo, visibility: Int, wind: Wind, rain: VolumeLast? = nil, snow: VolumeLast? = nil, clouds: Clouds, dt: Int, sys: CurrentWeather.Sys, timezone: Int, cityId: Int, cityName: String, base: String, cod: Int) {
+        self.coord = coord
+        self.conditions = conditions
+        self.mainWeatherInfo = mainWeatherInfo
+        self.visibility = visibility
+        self.wind = wind
+        self.rain = rain
+        self.snow = snow
+        self.clouds = clouds
+        self.dt = dt
+        self.sys = sys
+        self.timezone = timezone
+        self.cityId = cityId
+        self.cityName = cityName
+        self.base = base
+        self.cod = cod
 
-public struct Coord: Codable {
-    public let lon, lat: Double
-}
+        self.date = dt.date
+    }
 
-public struct MainWeatherInfo: Codable {
-    public let temp, feelsLike, tempMin, tempMax: Double
-    public let pressure, humidity: Int
-    public let seaLevel, grndLevel: Int?
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
 
-    enum CodingKeys: String, CodingKey {
-        case temp
-        case feelsLike = "feels_like"
-        case tempMin = "temp_min"
-        case tempMax = "temp_max"
-        case pressure, humidity
-        case seaLevel = "sea_level"
-        case grndLevel = "grnd_level"
+        coord = try container.decode(Coord.self, forKey: .coord)
+        conditions = try container.decode([WeatherCondition].self, forKey: .conditions)
+        mainWeatherInfo = try container.decode(MainWeatherInfo.self, forKey: .mainWeatherInfo)
+        visibility = try container.decode(Int.self, forKey: .visibility)
+        wind = try container.decode(Wind.self, forKey: .wind)
+        rain = try container.decodeIfPresent(VolumeLast.self, forKey: .rain)
+        snow = try container.decodeIfPresent(VolumeLast.self, forKey: .snow)
+        clouds = try container.decode(Clouds.self, forKey: .clouds)
+        dt = try container.decode(Int.self, forKey: .dt)
+        sys = try container.decode(Sys.self, forKey: .sys)
+        timezone = try container.decode(Int.self, forKey: .timezone)
+        cityId = try container.decode(Int.self, forKey: .cityId)
+        cityName = try container.decode(String.self, forKey: .cityName)
+        base = try container.decode(String.self, forKey: .base)
+        cod = try container.decode(Int.self, forKey: .cod)
+
+        self.date = dt.date
     }
 }
 
-public struct VolumeLast: Codable {
-    public let the1H: Double?
-    public let the3H: Double?
 
-    enum CodingKeys: String, CodingKey {
-        case the1H = "1h"
-        case the3H = "3h"
-    }
-}
 
-public struct Sys: Codable {
-    public let country: String?
-    public let sunrise, sunset: Int
-
-    let type, id: Int?
-    let message: String?
-}
-
-public struct WeatherCondition: Codable {
-    public let id: Int
-    public let main, description, icon: String
-    public var iconURL: String {
-        WeatherIconURLCreator.create(with: icon)
-    }
-}
-
-public struct Wind: Codable {
-    public let speed: Double
-    public let deg: Int
-    public let gust: Double
-}
