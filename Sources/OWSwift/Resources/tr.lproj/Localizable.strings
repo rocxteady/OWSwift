@@ -7,3 +7,4 @@
 */
 
 "OWSwiftError.notInitialized" = "OWSwift initialized edilmedi. OWSwift.initialize(with:) fonksiyonunu kullanarak initialize edin.";
+"WeatherMapError.imageDecoding" = "Gelen data image olarak decode edilemedi.";

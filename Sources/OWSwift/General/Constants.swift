@@ -8,12 +8,15 @@
 import Foundation
 
 struct Constants {
-    static let baseURL = "https://openweather.map.org"
+    static let baseURL = "https://openweathermap.org"
 
     struct API {
         static let baseAPIURL = "https://api.openweathermap.org/data"
         static let version = "2.5"
         static let fullBaseAPIURL = Self.baseAPIURL + "/" + Self.version
+        struct Map {
+            static let url = "https://tile.openweathermap.org/map"
+        }
     }
     struct Image {
         static let fullBaseIMGURL = Constants.baseURL + "/img/wn"
