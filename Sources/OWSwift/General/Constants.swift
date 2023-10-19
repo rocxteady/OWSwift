@@ -12,6 +12,7 @@ struct Constants {
 
     struct API {
         static let baseAPIURL = "https://api.openweathermap.org/data"
+        static let proBaseAPIURL = "https://pro.openweathermap.org/data"
         static let version = "2.5"
         static let fullBaseAPIURL = Self.baseAPIURL + "/" + Self.version
         struct Map {

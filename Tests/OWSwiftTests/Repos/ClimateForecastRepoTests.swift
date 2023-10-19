@@ -9,7 +9,7 @@ import XCTest
 @testable import OWSwift
 import Combine
 
-final class ClimateForecastRepoTests: XCTestCase {
+final class ForecasRepoTests: XCTestCase {
     private let configuration = URLSessionConfiguration.default
     private var cancellables = Set<AnyCancellable>()
 
@@ -23,48 +23,101 @@ final class ClimateForecastRepoTests: XCTestCase {
         OWSwift.sessionConfiguration.protocolClasses = nil
     }
 
-    func testGettingClimateForecastWithAsyncAwait() async throws {
-        MockedURLService.observer = { request -> (URLResponse?, Data?) in
-            let response = HTTPURLResponse(url: URL(string: ProEndpoint.climateForecast.fullURL)!, statusCode: 200, httpVersion: nil, headerFields: nil)
-            return (response, try ForecastResponse.mockData)
-        }
-
-        let forecastResponseFromData = try await ClimateForecastRepo.getClimateForecast(lat: 41, lon: 29)
-
-        let forecastResponse = ForecastResponse.mock
-        testModels(fromData: forecastResponseFromData, fromMock: forecastResponse)
+    func testGetting5DayForecastWithAsyncAwait() async throws {
+        try await testWithAsyncAwait(endpoint: .forecast)
     }
 
-    func testGettingClimateForecastWithPublisher() throws {
+    func testGetting5DayForecastWithPublisher() throws {
+        try testWithPublisher(endpoint: .forecast)
+    }
+
+    func testGettingDailyForecastWithAsyncAwait() async throws {
+        try await testWithAsyncAwait(endpoint: .dailyForecast)
+    }
+
+    func testGettingDailyForecastWithPublisher() throws {
+        try testWithPublisher(endpoint: .dailyForecast)
+    }
+
+    func testGettingHourlyForecastWithAsyncAwait() async throws {
+        try await testWithAsyncAwait(endpoint: .hourlyForecast)
+    }
+
+    func testGettingHourlyForecastWithPublisher() throws {
+        try testWithPublisher(endpoint: .hourlyForecast)
+    }
+
+    private func testWithAsyncAwait(endpoint: Endpoint) async throws {
         MockedURLService.observer = { request -> (URLResponse?, Data?) in
-            let response = HTTPURLResponse(url: URL(string: ProEndpoint.climateForecast.fullURL)!, statusCode: 200, httpVersion: nil, headerFields: nil)
+            let response = HTTPURLResponse(url: URL(string: Endpoint.forecast.fullURL)!, statusCode: 200, httpVersion: nil, headerFields: nil)
             return (response, try ForecastResponse.mockData)
         }
 
-        let publisher: AnyPublisher<ForecastResponse, Error> = ClimateForecastRepo.getClimateForecast(lat: 41, lon: 29)
+        let forecastResponseFromData: ForecastResponse?
+        switch endpoint {
+        case .forecast:
+            forecastResponseFromData = try await ForecastRepo.get5DayForecast(lat: 41, lon: 29)
+        case .dailyForecast:
+            forecastResponseFromData = try await ForecastRepo.getDailyForecast(lat: 41, lon: 29)
+        case .hourlyForecast:
+            forecastResponseFromData = try await ForecastRepo.getHourlyForecast(lat: 41, lon: 29)
+        default:
+            forecastResponseFromData = nil
+        }
 
-        let expectation = self.expectation(description: "api")
+        if let forecastResponseFromData {
+            let forecastResponse = ForecastResponse.mock
+            testModels(fromData: forecastResponseFromData, fromMock: forecastResponse)
+        } else {
+            XCTFail("forecastResponseFromData is nil!. Check the endpoint!")
+        }
+    }
 
-        publisher
-            .sink { completion in
-                switch completion {
-                case .failure(let error):
-                    XCTFail(error.localizedDescription)
-                    expectation.fulfill()
-                case .finished:
-                    expectation.fulfill()
+    private func testWithPublisher(endpoint: Endpoint) throws {
+        MockedURLService.observer = { request -> (URLResponse?, Data?) in
+            let response = HTTPURLResponse(url: URL(string: Endpoint.forecast.fullURL)!, statusCode: 200, httpVersion: nil, headerFields: nil)
+            return (response, try ForecastResponse.mockData)
+        }
+
+        let publisher: AnyPublisher<ForecastResponse, Error>?
+
+        switch endpoint {
+        case .forecast:
+            publisher = ForecastRepo.get5DayForecast(lat: 41, lon: 29)
+        case .dailyForecast:
+            publisher = ForecastRepo.getDailyForecast(lat: 41, lon: 29)
+        case .hourlyForecast:
+            publisher = ForecastRepo.getHourlyForecast(lat: 41, lon: 29)
+        default:
+            publisher = nil
+        }
+
+        if let publisher {
+            let expectation = self.expectation(description: "api")
+
+            publisher
+                .sink { completion in
+                    switch completion {
+                    case .failure(let error):
+                        XCTFail(error.localizedDescription)
+                        expectation.fulfill()
+                    case .finished:
+                        expectation.fulfill()
+                    }
+                } receiveValue: { [weak self] forecastResponseFromData in
+                    guard let self else {
+                        XCTFail("Test finished unexpectedly!")
+                        return
+                    }
+                    let forecastResponse = ForecastResponse.mock
+                    testModels(fromData: forecastResponseFromData, fromMock: forecastResponse)
                 }
-            } receiveValue: { [weak self] forecastResponseFromData in
-                guard let self else {
-                    XCTFail("Test finished unexpectedly!")
-                    return
-                }
-                let forecastResponse = ForecastResponse.mock
-                testModels(fromData: forecastResponseFromData, fromMock: forecastResponse)
-            }
-            .store(in: &cancellables)
+                .store(in: &cancellables)
 
-        waitForExpectations(timeout: 0.1)
+            waitForExpectations(timeout: 0.1)
+        } else {
+            XCTFail("publisher is nil!. Check the endpoint!")
+        }
     }
 
     private func testModels(fromData: ForecastResponse, fromMock: ForecastResponse) {

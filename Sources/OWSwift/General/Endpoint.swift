@@ -17,3 +17,11 @@ enum Endpoint: String {
         return Constants.API.fullBaseAPIURL + rawValue
     }
 }
+
+enum ProEndpoint: String {
+    case climateForecast = "/forecast/climate"
+
+    var fullURL: String {
+        return Constants.API.proBaseAPIURL + rawValue
+    }
+}
