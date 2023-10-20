@@ -8,7 +8,7 @@
 import Foundation
 
 public struct CurrentWeather: Decodable {
-    public struct Sys: Codable {
+    public struct Sys: Decodable {
         public let country: String?
         public let sunrise, sunset: Int
 
@@ -44,26 +44,6 @@ public struct CurrentWeather: Decodable {
         case base, cod
     }
 
-    public init(coord: Coord, conditions: [WeatherCondition], mainWeatherInfo: MainWeatherInfo, visibility: Int, wind: Wind, rain: VolumeLast? = nil, snow: VolumeLast? = nil, clouds: Clouds, dt: Int, sys: CurrentWeather.Sys, timezone: Int, cityId: Int, cityName: String, base: String, cod: Int) {
-        self.coord = coord
-        self.conditions = conditions
-        self.mainWeatherInfo = mainWeatherInfo
-        self.visibility = visibility
-        self.wind = wind
-        self.rain = rain
-        self.snow = snow
-        self.clouds = clouds
-        self.dt = dt
-        self.sys = sys
-        self.timezone = timezone
-        self.cityId = cityId
-        self.cityName = cityName
-        self.base = base
-        self.cod = cod
-
-        self.date = dt.date
-    }
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
@@ -86,6 +66,3 @@ public struct CurrentWeather: Decodable {
         self.date = dt.date
     }
 }
-
-
-

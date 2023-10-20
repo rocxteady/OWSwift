@@ -9,6 +9,6 @@ import Foundation
 
 struct WeatherIconURLCreator {
     static func create(with code: String) -> String {
-        Constants.Image.fullBaseIMGURL + "/" + code
+        Constants.Image.fullBaseIMGURL + "/" + code + "@2x.png"
     }
 }

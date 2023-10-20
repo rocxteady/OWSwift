@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct MainWeatherInfo: Codable {
+public struct MainWeatherInfo: Decodable {
     public let temp, feelsLike, tempMin, tempMax: Double
     public let pressure, humidity: Int
     public let seaLevel, grndLevel: Int?

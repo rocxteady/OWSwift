@@ -53,21 +53,20 @@ final class ForecasRepoTests: XCTestCase {
             return (response, try ForecastResponse.mockData)
         }
 
-        let forecastResponseFromData: ForecastResponse?
+        let forecastResponse: ForecastResponse?
         switch endpoint {
         case .forecast:
-            forecastResponseFromData = try await ForecastRepo.get5DayForecast(lat: 41, lon: 29)
+            forecastResponse = try await ForecastRepo.get5DayForecast(lat: 41, lon: 29)
         case .dailyForecast:
-            forecastResponseFromData = try await ForecastRepo.getDailyForecast(lat: 41, lon: 29)
+            forecastResponse = try await ForecastRepo.getDailyForecast(lat: 41, lon: 29)
         case .hourlyForecast:
-            forecastResponseFromData = try await ForecastRepo.getHourlyForecast(lat: 41, lon: 29)
+            forecastResponse = try await ForecastRepo.getHourlyForecast(lat: 41, lon: 29)
         default:
-            forecastResponseFromData = nil
+            forecastResponse = nil
         }
 
-        if let forecastResponseFromData {
-            let forecastResponse = ForecastResponse.mock
-            testModels(fromData: forecastResponseFromData, fromMock: forecastResponse)
+        if let forecastResponse {
+            testModel(forecastResponse: forecastResponse)
         } else {
             XCTFail("forecastResponseFromData is nil!. Check the endpoint!")
         }
@@ -104,13 +103,12 @@ final class ForecasRepoTests: XCTestCase {
                     case .finished:
                         expectation.fulfill()
                     }
-                } receiveValue: { [weak self] forecastResponseFromData in
+                } receiveValue: { [weak self] forecastResponse in
                     guard let self else {
                         XCTFail("Test finished unexpectedly!")
                         return
                     }
-                    let forecastResponse = ForecastResponse.mock
-                    testModels(fromData: forecastResponseFromData, fromMock: forecastResponse)
+                    testModel(forecastResponse: forecastResponse)
                 }
                 .store(in: &cancellables)
 
@@ -120,45 +118,45 @@ final class ForecasRepoTests: XCTestCase {
         }
     }
 
-    private func testModels(fromData: ForecastResponse, fromMock: ForecastResponse) {
-        XCTAssertEqual(fromMock.cnt, fromData.cnt)
-        XCTAssertEqual(fromMock.cod, fromData.cod)
-        XCTAssertEqual(fromMock.message, fromData.message)
-        XCTAssertEqual(fromMock.city.country, fromData.city.country)
-        XCTAssertEqual(fromMock.city.id, fromData.city.id)
-        XCTAssertEqual(fromMock.city.name, fromData.city.name)
-        XCTAssertEqual(fromMock.city.population, fromData.city.population)
-        XCTAssertEqual(fromMock.city.sunrise, fromData.city.sunrise)
-        XCTAssertEqual(fromMock.city.sunset, fromData.city.sunset)
-        XCTAssertEqual(fromMock.city.timezone, fromData.city.timezone)
-        XCTAssertEqual(fromMock.city.coord.lat, fromData.city.coord.lat)
-        XCTAssertEqual(fromMock.city.coord.lon, fromData.city.coord.lon)
-        XCTAssertEqual(fromMock.list[0].dt, fromData.list[0].dt)
-        XCTAssertEqual(fromMock.list[0].dtTxt, fromData.list[0].dtTxt)
-        XCTAssertEqual(fromMock.list[0].pop, fromData.list[0].pop)
-        XCTAssertEqual(fromMock.list[0].visibility, fromData.list[0].visibility)
-        XCTAssertEqual(fromMock.list[0].clouds.all, fromData.list[0].clouds.all)
-        XCTAssertEqual(fromMock.list[0].conditions[0].icon, fromData.list[0].conditions[0].icon)
-        XCTAssertEqual(fromMock.list[0].conditions[0].iconURL, fromData.list[0].conditions[0].iconURL)
-        XCTAssertEqual(fromMock.list[0].conditions[0].id, fromData.list[0].conditions[0].id)
-        XCTAssertEqual(fromMock.list[0].conditions[0].main, fromData.list[0].conditions[0].main)
-        XCTAssertEqual(fromMock.list[0].conditions[0].description, fromData.list[0].conditions[0].description)
-        XCTAssertEqual(fromMock.list[0].mainWeatherInfo.feelsLike, fromData.list[0].mainWeatherInfo.feelsLike)
-        XCTAssertEqual(fromMock.list[0].mainWeatherInfo.grndLevel, fromData.list[0].mainWeatherInfo.grndLevel)
-        XCTAssertEqual(fromMock.list[0].mainWeatherInfo.humidity, fromData.list[0].mainWeatherInfo.humidity)
-        XCTAssertEqual(fromMock.list[0].mainWeatherInfo.pressure, fromData.list[0].mainWeatherInfo.pressure)
-        XCTAssertEqual(fromMock.list[0].mainWeatherInfo.seaLevel, fromData.list[0].mainWeatherInfo.seaLevel)
-        XCTAssertEqual(fromMock.list[0].mainWeatherInfo.temp, fromData.list[0].mainWeatherInfo.temp)
-        XCTAssertEqual(fromMock.list[0].mainWeatherInfo.tempMax, fromData.list[0].mainWeatherInfo.tempMax)
-        XCTAssertEqual(fromMock.list[0].mainWeatherInfo.tempMin, fromData.list[0].mainWeatherInfo.tempMin)
-        XCTAssertEqual(fromMock.list[0].mainWeatherInfo.tempKf, fromData.list[0].mainWeatherInfo.tempKf)
-        XCTAssertEqual(fromMock.list[0].rain?.the1H, fromData.list[0].rain?.the1H)
-        XCTAssertEqual(fromMock.list[0].rain?.the3H, fromData.list[0].rain?.the3H)
-        XCTAssertEqual(fromMock.list[0].snow?.the1H, fromData.list[0].snow?.the1H)
-        XCTAssertEqual(fromMock.list[0].snow?.the3H, fromData.list[0].snow?.the3H)
-        XCTAssertEqual(fromMock.list[0].sys.pod, fromData.list[0].sys.pod)
-        XCTAssertEqual(fromMock.list[0].wind.deg, fromData.list[0].wind.deg)
-        XCTAssertEqual(fromMock.list[0].wind.gust, fromData.list[0].wind.gust)
-        XCTAssertEqual(fromMock.list[0].wind.speed, fromData.list[0].wind.speed)
+    private func testModel(forecastResponse: ForecastResponse) {
+        XCTAssertEqual(forecastResponse.cnt, 40)
+        XCTAssertEqual(forecastResponse.list[0].dt, 1661871600)
+        XCTAssertEqual(forecastResponse.list[0].mainWeatherInfo.temp, 296.76)
+        XCTAssertEqual(forecastResponse.list[0].mainWeatherInfo.feelsLike, 296.98)
+        XCTAssertEqual(forecastResponse.list[0].mainWeatherInfo.tempMin, 296.76)
+        XCTAssertEqual(forecastResponse.list[0].mainWeatherInfo.tempMax, 297.87)
+        XCTAssertEqual(forecastResponse.list[0].mainWeatherInfo.pressure, 1015)
+        XCTAssertEqual(forecastResponse.list[0].mainWeatherInfo.humidity, 69)
+        XCTAssertEqual(forecastResponse.list[0].mainWeatherInfo.seaLevel, 1015)
+        XCTAssertEqual(forecastResponse.list[0].mainWeatherInfo.grndLevel, 933)
+        XCTAssertEqual(forecastResponse.list[0].mainWeatherInfo.tempKf, -1.11)
+        XCTAssertEqual(forecastResponse.list[0].conditions[0].id, 500)
+        XCTAssertEqual(forecastResponse.list[0].conditions[0].main, "Rain")
+        XCTAssertEqual(forecastResponse.list[0].conditions[0].description, "light rain")
+        XCTAssertEqual(forecastResponse.list[0].conditions[0].icon, "10d")
+        XCTAssertEqual(forecastResponse.list[0].conditions[0].iconURL, "https://openweathermap.org/img/wn/10d@2x.png")
+        XCTAssertEqual(forecastResponse.list[0].clouds.all, 100)
+        XCTAssertEqual(forecastResponse.list[0].wind.speed, 0.62)
+        XCTAssertEqual(forecastResponse.list[0].wind.deg, 349)
+        XCTAssertEqual(forecastResponse.list[0].wind.gust, 1.18)
+        XCTAssertEqual(forecastResponse.list[0].visibility, 10000)
+        XCTAssertEqual(forecastResponse.list[0].pop, 0.32)
+        XCTAssertEqual(forecastResponse.list[0].rain?.the1H, 0.1)
+        XCTAssertEqual(forecastResponse.list[0].rain?.the3H, 0.26)
+        XCTAssertEqual(forecastResponse.list[0].snow?.the1H, 0.2)
+        XCTAssertEqual(forecastResponse.list[0].snow?.the3H, 0.3)
+        XCTAssertEqual(forecastResponse.list[0].sys.pod, .day)
+        XCTAssertEqual(forecastResponse.list[0].dtTxt, "2022-08-30 15:00:00")
+        XCTAssertEqual(forecastResponse.city.id, 3163858)
+        XCTAssertEqual(forecastResponse.city.name, "Zocca")
+        XCTAssertEqual(forecastResponse.city.coord.lon, 10.99)
+        XCTAssertEqual(forecastResponse.city.coord.lat, 44.34)
+        XCTAssertEqual(forecastResponse.city.country, "IT")
+        XCTAssertEqual(forecastResponse.city.population, 4593)
+        XCTAssertEqual(forecastResponse.city.timezone, 7200)
+        XCTAssertEqual(forecastResponse.city.sunrise, 1661834187)
+        XCTAssertEqual(forecastResponse.city.sunset, 1661882248)
+        XCTAssertEqual(forecastResponse.cod, "200")
+        XCTAssertEqual(forecastResponse.message, 0)
     }
 }

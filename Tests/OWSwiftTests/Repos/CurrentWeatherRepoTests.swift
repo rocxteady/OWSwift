@@ -29,9 +29,8 @@ final class CurrentWeatherRepoTests: XCTestCase {
             return (response, try CurrentWeather.mockData)
         }
 
-        let currentWeatherFromData = try await CurrentWeatherRepo.getCurrentWeather(lat: 41, lon: 29)
-        let currentWeather = CurrentWeather.mock
-        testModels(fromData: currentWeatherFromData, fromMock: currentWeather)
+        let currentWeather = try await CurrentWeatherRepo.getCurrentWeather(lat: 41, lon: 29)
+        testModel(currentWeather: currentWeather)
     }
 
     func testGettingCurrentWeatherWithPublisher() throws {
@@ -53,55 +52,55 @@ final class CurrentWeatherRepoTests: XCTestCase {
                 case .finished:
                     expectation.fulfill()
                 }
-            } receiveValue: { [weak self] currentWeatherFromData in
+            } receiveValue: { [weak self] currentWeather in
                 guard let self else {
                     XCTFail("Test finished unexpectedly!")
                     return
                 }
-                let currentWeather = CurrentWeather.mock
-                testModels(fromData: currentWeatherFromData, fromMock: currentWeather)
+                testModel(currentWeather: currentWeather)
             }
             .store(in: &cancellables)
 
         waitForExpectations(timeout: 0.1)
     }
 
-    private func testModels(fromData: CurrentWeather, fromMock: CurrentWeather) {
-        XCTAssertEqual(fromMock.base, fromData.base)
-        XCTAssertEqual(fromMock.cityId, fromData.cityId)
-        XCTAssertEqual(fromMock.cityName, fromData.cityName)
-        XCTAssertEqual(fromMock.cod, fromData.cod)
-        XCTAssertEqual(fromMock.dt, fromData.dt)
-        XCTAssertEqual(fromMock.timezone, fromData.timezone)
-        XCTAssertEqual(fromMock.visibility, fromData.visibility)
-        XCTAssertEqual(fromMock.clouds.all, fromData.clouds.all)
-        XCTAssertEqual(fromMock.conditions[0].description, fromData.conditions[0].description)
-        XCTAssertEqual(fromMock.conditions[0].icon, fromData.conditions[0].icon)
-        XCTAssertEqual(fromMock.conditions[0].iconURL, fromData.conditions[0].iconURL)
-        XCTAssertEqual(fromMock.conditions[0].id, fromData.conditions[0].id)
-        XCTAssertEqual(fromMock.conditions[0].main, fromData.conditions[0].main)
-        XCTAssertEqual(fromMock.coord.lat, fromData.coord.lat)
-        XCTAssertEqual(fromMock.coord.lon, fromData.coord.lon)
-        XCTAssertEqual(fromMock.mainWeatherInfo.feelsLike, fromData.mainWeatherInfo.feelsLike)
-        XCTAssertEqual(fromMock.mainWeatherInfo.grndLevel, fromData.mainWeatherInfo.grndLevel)
-        XCTAssertEqual(fromMock.mainWeatherInfo.humidity, fromData.mainWeatherInfo.humidity)
-        XCTAssertEqual(fromMock.mainWeatherInfo.pressure, fromData.mainWeatherInfo.pressure)
-        XCTAssertEqual(fromMock.mainWeatherInfo.seaLevel, fromData.mainWeatherInfo.seaLevel)
-        XCTAssertEqual(fromMock.mainWeatherInfo.temp, fromData.mainWeatherInfo.temp)
-        XCTAssertEqual(fromMock.mainWeatherInfo.tempMax, fromData.mainWeatherInfo.tempMax)
-        XCTAssertEqual(fromMock.mainWeatherInfo.tempMin, fromData.mainWeatherInfo.tempMin)
-        XCTAssertEqual(fromMock.rain?.the1H, fromData.rain?.the1H)
-        XCTAssertEqual(fromMock.rain?.the3H, fromData.rain?.the3H)
-        XCTAssertEqual(fromMock.snow?.the1H, fromData.snow?.the1H)
-        XCTAssertEqual(fromMock.snow?.the3H, fromData.snow?.the3H)
-        XCTAssertEqual(fromMock.sys.country, fromData.sys.country)
-        XCTAssertEqual(fromMock.sys.id, fromData.sys.id)
-        XCTAssertEqual(fromMock.sys.message, fromData.sys.message)
-        XCTAssertEqual(fromMock.sys.sunrise, fromData.sys.sunrise)
-        XCTAssertEqual(fromMock.sys.sunset, fromData.sys.sunset)
-        XCTAssertEqual(fromMock.sys.type, fromData.sys.type)
-        XCTAssertEqual(fromMock.wind.deg, fromData.wind.deg)
-        XCTAssertEqual(fromMock.wind.gust, fromData.wind.gust)
-        XCTAssertEqual(fromMock.wind.speed, fromData.wind.speed)
+    private func testModel(currentWeather: CurrentWeather) {
+        XCTAssertEqual(currentWeather.coord.lon, 29)
+        XCTAssertEqual(currentWeather.coord.lat, 41)
+        XCTAssertEqual(currentWeather.conditions[0].id, 800)
+        XCTAssertEqual(currentWeather.conditions[0].icon, "01d")
+        XCTAssertEqual(currentWeather.conditions[0].description, "clear sky")
+        XCTAssertEqual(currentWeather.conditions[0].iconURL, "https://openweathermap.org/img/wn/01d@2x.png")
+        XCTAssertEqual(currentWeather.conditions[0].main, "Clear")
+        XCTAssertEqual(currentWeather.mainWeatherInfo.temp, 21.19)
+        XCTAssertEqual(currentWeather.mainWeatherInfo.feelsLike, 21.27)
+        XCTAssertEqual(currentWeather.mainWeatherInfo.tempMin, 21.19)
+        XCTAssertEqual(currentWeather.mainWeatherInfo.tempMax, 22.61)
+        XCTAssertEqual(currentWeather.mainWeatherInfo.pressure, 1010)
+        XCTAssertEqual(currentWeather.mainWeatherInfo.humidity, 73)
+        XCTAssertEqual(currentWeather.mainWeatherInfo.seaLevel, 1010)
+        XCTAssertEqual(currentWeather.mainWeatherInfo.grndLevel, 1009)
+        XCTAssertNil(currentWeather.mainWeatherInfo.tempKf)
+        XCTAssertEqual(currentWeather.visibility, 10000)
+        XCTAssertEqual(currentWeather.wind.speed, 4.12)
+        XCTAssertEqual(currentWeather.wind.deg, 240)
+        XCTAssertEqual(currentWeather.wind.gust, 6.26)
+        XCTAssertEqual(currentWeather.rain?.the1H, 0.1)
+        XCTAssertEqual(currentWeather.rain?.the3H, 0.1)
+        XCTAssertEqual(currentWeather.snow?.the1H, 0.1)
+        XCTAssertEqual(currentWeather.snow?.the3H, 0.1)
+        XCTAssertEqual(currentWeather.clouds.all, 0)
+        XCTAssertEqual(currentWeather.dt, 1697374381)
+        XCTAssertEqual(currentWeather.sys.country, "TR")
+        XCTAssertEqual(currentWeather.sys.sunrise, 1697343277)
+        XCTAssertEqual(currentWeather.sys.sunset, 1697383489)
+        XCTAssertEqual(currentWeather.sys.type, 1)
+        XCTAssertEqual(currentWeather.sys.id, 6970)
+        XCTAssertEqual(currentWeather.sys.message, "Message")
+        XCTAssertEqual(currentWeather.timezone, 10800)
+        XCTAssertEqual(currentWeather.cityId, 738329)
+        XCTAssertEqual(currentWeather.cityName, "Uskudar")
+        XCTAssertEqual(currentWeather.base, "stations")
+        XCTAssertEqual(currentWeather.cod, 200)
     }
 }

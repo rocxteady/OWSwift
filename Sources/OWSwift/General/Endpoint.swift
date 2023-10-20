@@ -12,6 +12,7 @@ enum Endpoint: String {
     case forecast = "/forecast"
     case dailyForecast = "/forecast/daily"
     case hourlyForecast = "/forecast/hourly"
+    case roadRisk = "/roadrisk"
 
     var fullURL: String {
         return Constants.API.fullBaseAPIURL + rawValue

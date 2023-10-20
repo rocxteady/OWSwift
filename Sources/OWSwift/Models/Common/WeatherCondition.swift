@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct WeatherCondition: Codable {
+public struct WeatherCondition: Decodable {
     public let id: Int
     public let main, description, icon: String
     public var iconURL: String {

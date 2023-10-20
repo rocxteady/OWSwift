@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct VolumeLast: Codable {
+public struct VolumeLast: Decodable {
     public let the1H: Double?
     public let the3H: Double?
 

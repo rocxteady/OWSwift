@@ -42,22 +42,6 @@ public struct Forecast: Decodable {
         case dtTxt = "dt_txt"
     }
 
-    public init(dt: Int, mainWeatherInfo: MainWeatherInfo, conditions: [WeatherCondition], clouds: Clouds, wind: Wind, visibility: Int, pop: Double, rain: VolumeLast? = nil, snow: VolumeLast? = nil, sys: Forecast.Sys, dtTxt: String) {
-        self.dt = dt
-        self.mainWeatherInfo = mainWeatherInfo
-        self.conditions = conditions
-        self.clouds = clouds
-        self.wind = wind
-        self.visibility = visibility
-        self.pop = pop
-        self.rain = rain
-        self.snow = snow
-        self.sys = sys
-        self.dtTxt = dtTxt
-
-        self.date = dt.date
-    }
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 

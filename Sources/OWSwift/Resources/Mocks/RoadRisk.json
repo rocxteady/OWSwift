@@ -1,0 +1,28 @@
+[
+  {
+    "dt": 1602702000,
+    "coord": [
+      7.27,
+      44.04
+    ],
+    "weather": {
+      "temp": 278.44,
+      "wind_speed": 2.27,
+      "wind_deg": 7,
+      "precipitation_intensity": 0.38,
+      "visibility": 10000,
+      "dew_point": 276.13
+    },
+    "road": {
+      "state": 2,
+      "temp": 293.85
+    },
+    "alerts": [
+      {
+        "sender_name": "METEO-FRANCE",
+        "event": "Moderate thunderstorm warning",
+        "event_level": 2
+      }
+    ]
+  }
+]
