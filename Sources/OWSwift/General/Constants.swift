@@ -18,14 +18,17 @@ struct Constants {
         struct Map {
             static let url = "https://tile.openweathermap.org/map"
         }
-    }
-    struct Image {
-        static let fullBaseIMGURL = Constants.baseURL + "/img/wn"
+        struct AdvancedMap {
+            static let url = "http://maps.openweathermap.org/maps/2.0/weather"
+        }
+        struct Image {
+            static let fullBaseIMGURL = Constants.baseURL + "/img/wn"
+        }
     }
 }
 
 extension Constants {
-    static var defaultParameters: [String: Any] {
+    static var defaultParameters: Parameters {
         get throws {
             [
                 "appId": try OWSwift.apiKey,

@@ -69,26 +69,9 @@ public struct RoadRisk: Decodable {
         }
     }
 
-    public let dt: Int
-    public let date: Date
+    public let dt: Date
     public let coord: [Double]
     public let weather: Weather
     public let road: Road?
     public let alerts: [Alert]
-
-    enum CodingKeys: String, CodingKey {
-        case dt, coord, weather, road, alerts
-    }
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-
-        dt = try container.decode(Int.self, forKey: .dt)
-        coord = try container.decode([Double].self, forKey: .coord)
-        weather = try container.decode(Weather.self, forKey: .weather)
-        road = try container.decode(Road.self, forKey: .road)
-        alerts = try container.decode([Alert].self, forKey: .alerts)
-
-        date = dt.date
-    }
 }

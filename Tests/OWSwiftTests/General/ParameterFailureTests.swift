@@ -14,7 +14,7 @@ final class ParameterFailureTests: XCTestCase {
 
     func testCreatingParametersWithPublisherFailure() throws {
         let parameters: Parameters = ["lat": 41, "lon": 29]
-        let createdParameters = parameters.createParametersWithPublisher()
+        let createdParameters = parameters.createParameters_publisher()
 
         createdParameters.sink { completion in
             switch completion {

@@ -8,3 +8,8 @@
 
 "OWSwiftError.notInitialized" = "OWSwift initialized edilmedi. OWSwift.initialize(with:) fonksiyonunu kullanarak initialize edin.";
 "WeatherMapError.imageDecoding" = "Gelen data image olarak decode edilemedi.";
+"ValidationError.latitude" = "Enlem -90...90 aralığında olmalı.";
+"ValidationError.longitude" = "Boylam -180...180 aralığında olmalı.";
+"ValidationError.zoomLeveLAndTiles" = "Zoom ve tile parametreleri birbirine uymuyor.";
+"ValidationError.opacity" = "Opacity 0...1.0 aralığında olmalı.";
+"ValidationError.colorPalettes" = "En az iki ColorPalette belirtilmeli.";

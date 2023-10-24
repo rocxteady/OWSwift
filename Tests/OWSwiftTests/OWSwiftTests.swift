@@ -2,7 +2,6 @@ import XCTest
 @testable import OWSwift
 
 final class OWSwiftTests: XCTestCase {
-    
     override func tearDownWithError() throws {
         OWSwift.deIitialize()
     }
@@ -37,6 +36,6 @@ final class OWSwiftTests: XCTestCase {
 
     func testErrors() {
         let notInitialized = OWSwiftError.notInitialized
-        XCTAssertNotNil(notInitialized.errorDescription, "OWSwiftError case should not be nil!")
+        XCTAssertNotNil(notInitialized.errorDescription, "OWSwiftError description should not be nil!")
     }
 }

@@ -7,23 +7,23 @@
 
 import Foundation
 import Combine
+import ThrowPublisher
 
 typealias Parameters = [String: Any]
+typealias OptinalParameters = [String: Any?]
 
 extension Parameters {
-    func createParameters() throws -> [String: Any] {
+    @ThrowPublisher
+    func createParameters() throws -> Self {
         let defaultParameters = try Constants.defaultParameters
         return defaultParameters.merging(self) { (_, new) in new }
     }
+}
 
-    func createParametersWithPublisher() -> Future<Self, Error> {
-        Future { promise in
-            do {
-                let parameters: Self = try createParameters()
-                promise(.success(parameters))
-            } catch {
-                promise(.failure(error))
-            }
-        }
+extension OptinalParameters {
+    @ThrowPublisher
+    func createParameters() throws -> Parameters{
+        try self.compactMapValues { $0 }
+            .createParameters()
     }
 }

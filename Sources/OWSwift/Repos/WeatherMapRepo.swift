@@ -8,6 +8,7 @@
 import Foundation
 import Resting
 import Combine
+import ThrowPublisher
 #if canImport(UIKit)
 import UIKit.UIImage
 #elseif canImport(AppKit)
@@ -25,32 +26,36 @@ public enum WeatherMapError: LocalizedError {
     }
 }
 
-struct WeatherMapRepo {
-    static func getMap(layer: MapLayerType, zoomLevel: Int, xTile: Int, yTile: Int) async throws -> Data {
+public struct WeatherMapRepo {
+    public static func getMap(layer: MapLayerType, zoomLevel: Int, xTile: Int, yTile: Int) async throws -> Data {
+        try validate(zoomLevel: zoomLevel, xTile: xTile, yTile: yTile)
         let restClient = RestClient.initialize()
         let url = createURL(layer: layer, zoomLevel: zoomLevel, xTile: xTile, yTile: yTile)
         return try await restClient.fetch(with: .init(urlString: url, parameters: .init().createParameters()))
     }
 
-    static func getMap(layer: MapLayerType, zoomLevel: Int, xTile: Int, yTile: Int) -> AnyPublisher<Data, Error> {
-        return [String: Any]()
-            .createParametersWithPublisher()
-            .map { parameters -> AnyPublisher<Data, Error> in
+    public static func getMap(layer: MapLayerType, zoomLevel: Int, xTile: Int, yTile: Int) -> AnyPublisher<Data, Error> {
+        validate_publisher(zoomLevel: zoomLevel, xTile: xTile, yTile: yTile)
+            .tryMap {
+                try Parameters()
+                    .createParameters()
+            }
+            .flatMap { parameters in
                 let restClient = RestClient.initialize()
                 let url = createURL(layer: layer, zoomLevel: zoomLevel, xTile: xTile, yTile: yTile)
-                return restClient.publisher(with: .init(urlString: url, parameters: parameters))
+                return restClient.publisher(with: .init(urlString: url, parameters: parameters)).map { $0 }
             }
-            .switchToLatest()
             .eraseToAnyPublisher()
     }
 }
 
 #if canImport(UIKit)
 
-extension WeatherMapRepo {
+public extension WeatherMapRepo {
     @MainActor
     static func getMap(layer: MapLayerType, zoomLevel: Int, xTile: Int, yTile: Int) async throws -> UIImage {
-        guard let image = try await UIImage(data: getMap(layer: layer, zoomLevel: zoomLevel, xTile: xTile, yTile: yTile)) else {
+        let data: Data = try await getMap(layer: layer, zoomLevel: zoomLevel, xTile: xTile, yTile: yTile)
+        guard let image = UIImage(data: data) else {
             throw WeatherMapError.imageDecoding
         }
         return image
@@ -71,10 +76,11 @@ extension WeatherMapRepo {
 
 #if canImport(AppKit)
 
-extension WeatherMapRepo {
+public extension WeatherMapRepo {
     @MainActor
     static func getMap(layer: MapLayerType, zoomLevel: Int, xTile: Int, yTile: Int) async throws -> NSImage {
-        guard let image = try await NSImage(data: getMap(layer: layer, zoomLevel: zoomLevel, xTile: xTile, yTile: yTile)) else {
+        let data: Data = try await getMap(layer: layer, zoomLevel: zoomLevel, xTile: xTile, yTile: yTile)
+        guard let image = NSImage(data: data) else {
             throw WeatherMapError.imageDecoding
         }
         return image
@@ -95,7 +101,7 @@ extension WeatherMapRepo {
 
 import SwiftUI
 
-extension WeatherMapRepo {
+public extension WeatherMapRepo {
     @MainActor
     static func getMap(layer: MapLayerType, zoomLevel: Int, xTile: Int, yTile: Int) async throws -> Image {
         #if canImport(UIKit)
@@ -110,22 +116,26 @@ extension WeatherMapRepo {
     static func getMap(layer: MapLayerType, zoomLevel: Int, xTile: Int, yTile: Int) -> AnyPublisher<Image, Error> {
         #if canImport(UIKit)
         let publisher: AnyPublisher<UIImage, Error> =  getMap(layer: layer, zoomLevel: zoomLevel, xTile: xTile, yTile: yTile)
+        let imagePublisher = publisher.tryMap {
+            Image(uiImage: $0)
+        }
         #elseif canImport(AppKit)
         let publisher: AnyPublisher<NSImage, Error> =  getMap(layer: layer, zoomLevel: zoomLevel, xTile: xTile, yTile: yTile)
-        #endif
-        return publisher.tryMap {
-            #if canImport(UIKit)
-            return Image(uiImage: $0)
-            #elseif canImport(AppKit)
-            return Image(nsImage: $0)
-            #endif
+        let imagePublisher = publisher.tryMap {
+            Image(nsImage: $0)
         }
-        .eraseToAnyPublisher()
+        #endif
+        return imagePublisher.eraseToAnyPublisher()
     }
 }
 
 extension WeatherMapRepo {
     private static func createURL(layer: MapLayerType, zoomLevel: Int, xTile: Int, yTile: Int) -> String {
         return "\(Constants.API.Map.url)/\(layer.rawValue)/\(zoomLevel)/\(xTile)/\(yTile)"
+    }
+
+    @ThrowPublisher
+    fileprivate static func validate(zoomLevel: Int, xTile: Int, yTile: Int) throws {
+        try Validators.validateZoomLevelAndTiles(zoomLevel: zoomLevel, xTile: xTile, yTile: yTile)
     }
 }

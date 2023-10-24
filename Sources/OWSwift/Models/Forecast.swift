@@ -21,8 +21,7 @@ public struct Forecast: Decodable {
         let pod: PartOfDay
     }
 
-    public let dt: Int
-    public let date: Date
+    public let dt: Date
     public let mainWeatherInfo: MainWeatherInfo
     public let conditions: [WeatherCondition]
     public let clouds: Clouds
@@ -40,23 +39,5 @@ public struct Forecast: Decodable {
         case conditions = "weather"
         case clouds, wind, visibility, pop, rain, snow, sys
         case dtTxt = "dt_txt"
-    }
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-
-        dt = try container.decode(Int.self, forKey: .dt)
-        mainWeatherInfo = try container.decode(MainWeatherInfo.self, forKey: .mainWeatherInfo)
-        conditions = try container.decode([WeatherCondition].self, forKey: .conditions)
-        clouds = try container.decode(Clouds.self, forKey: .clouds)
-        wind = try container.decode(Wind.self, forKey: .wind)
-        visibility = try container.decode(Int.self, forKey: .visibility)
-        pop = try container.decode(Double.self, forKey: .pop)
-        rain = try container.decodeIfPresent(VolumeLast.self, forKey: .rain)
-        snow = try container.decodeIfPresent(VolumeLast.self, forKey: .snow)
-        sys = try container.decode(Sys.self, forKey: .sys)
-        dtTxt = try container.decode(String.self, forKey: .dtTxt)
-
-        date = dt.date
     }
 }

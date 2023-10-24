@@ -10,6 +10,7 @@ import Resting
 
 extension RestClient {
     static func initialize() -> RestClient {
-        .init(configuration: .init(sessionConfiguration: OWSwift.sessionConfiguration))
+        .init(configuration: .init(sessionConfiguration: OWSwift.sessionConfiguration, jsonDecoder: .initialize()))
     }
 }
+

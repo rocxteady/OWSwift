@@ -14,6 +14,7 @@ final class CurrentWeatherRepoTests: XCTestCase {
     private var cancellables = Set<AnyCancellable>()
 
     override func setUpWithError() throws {
+        print(Date().timeIntervalSince1970)
         OWSwift.sessionConfiguration.protocolClasses = [MockedURLService.self]
         OWSwift.initialize(with: "hjdf87238jfhjhsh838hsjjdf83ıjdha")
     }
@@ -90,7 +91,7 @@ final class CurrentWeatherRepoTests: XCTestCase {
         XCTAssertEqual(currentWeather.snow?.the1H, 0.1)
         XCTAssertEqual(currentWeather.snow?.the3H, 0.1)
         XCTAssertEqual(currentWeather.clouds.all, 0)
-        XCTAssertEqual(currentWeather.dt, 1697374381)
+        XCTAssertEqual(currentWeather.dt, Date(timeIntervalSince1970: 1697374381))
         XCTAssertEqual(currentWeather.sys.country, "TR")
         XCTAssertEqual(currentWeather.sys.sunrise, 1697343277)
         XCTAssertEqual(currentWeather.sys.sunset, 1697383489)

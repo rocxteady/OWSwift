@@ -31,7 +31,7 @@ final class RoadRiskRepoTests: XCTestCase {
             let response = HTTPURLResponse(url: URL(string: "Endpoint.roadRisk.fullURL")!, statusCode: 200, httpVersion: nil, headerFields: nil)
             return (response, try RoadRisk.mockData)
         }
-        let roadRisks = try await RoadRiskRepo.getRoadRisk(locations: [.init(lat: 7.27, lon: 44.04, dt: 1602702000)])
+        let roadRisks = try await RoadRiskRepo.getRoadRisk(locations: [.init(lat: 7.27, lon: 44.04, dt: Date(timeIntervalSince1970: 1602702000))])
         testModel(roadRisks: roadRisks)
     }
 
@@ -41,7 +41,7 @@ final class RoadRiskRepoTests: XCTestCase {
             return (response, try RoadRisk.mockData)
         }
 
-        let publisher: AnyPublisher<[RoadRisk], Error> = RoadRiskRepo.getRoadRisk(locations: [.init(lat: 7.27, lon: 44.04, dt: 1602702000)])
+        let publisher: AnyPublisher<[RoadRisk], Error> = RoadRiskRepo.getRoadRisk(locations: [.init(lat: 7.27, lon: 44.04, dt: Date(timeIntervalSince1970: 1602702000))])
 
         let expectation = self.expectation(description: "api")
 
@@ -67,7 +67,7 @@ final class RoadRiskRepoTests: XCTestCase {
     }
 
     private func testModel(roadRisks: [RoadRisk]) {
-        XCTAssertEqual(roadRisks[0].dt, 1602702000)
+        XCTAssertEqual(roadRisks[0].dt, Date(timeIntervalSince1970: 1602702000))
         XCTAssertEqual(roadRisks[0].coord, [7.27, 44.04])
         XCTAssertEqual(roadRisks[0].weather.temp, 278.44)
         XCTAssertEqual(roadRisks[0].weather.windSpeed, 2.27)

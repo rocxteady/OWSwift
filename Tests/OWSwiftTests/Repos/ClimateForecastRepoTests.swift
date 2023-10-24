@@ -120,7 +120,7 @@ final class ForecasRepoTests: XCTestCase {
 
     private func testModel(forecastResponse: ForecastResponse) {
         XCTAssertEqual(forecastResponse.cnt, 40)
-        XCTAssertEqual(forecastResponse.list[0].dt, 1661871600)
+        XCTAssertEqual(forecastResponse.list[0].dt, Date(timeIntervalSince1970: 1661871600))
         XCTAssertEqual(forecastResponse.list[0].mainWeatherInfo.temp, 296.76)
         XCTAssertEqual(forecastResponse.list[0].mainWeatherInfo.feelsLike, 296.98)
         XCTAssertEqual(forecastResponse.list[0].mainWeatherInfo.tempMin, 296.76)

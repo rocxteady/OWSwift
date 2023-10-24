@@ -14,14 +14,15 @@ let package = Package(
             targets: ["OWSwift"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/rocxteady/Resting.git", .upToNextMajor(from: "0.0.6"))
+        .package(url: "https://github.com/rocxteady/Resting.git", .upToNextMajor(from: "0.0.6")),
+        .package(url: "https://github.com/rocxteady/ThrowPublisher.git", .upToNextMajor(from: "0.0.2"))
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
             name: "OWSwift",
-            dependencies: ["Resting"],
+            dependencies: ["Resting", "ThrowPublisher"],
             resources: [.process("Resources/Mocks")]
         ),
         .testTarget(

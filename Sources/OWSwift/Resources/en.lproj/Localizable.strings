@@ -8,3 +8,8 @@
 
 "OWSwiftError.notInitialized" = "OWSwift not initialized. Use OWSwift.initialize(with:) to initialize.";
 "WeatherMapError.imageDecoding" = "Returned data could not be decoded as image.";
+"ValidationError.latitude" = "Latitude must be in range of -90...90.";
+"ValidationError.longitude" = "Longitude must be in range of -180...180.";
+"ValidationError.zoomLeveLAndTiles" = "Zoom and tile parameters don't fit each other.";
+"ValidationError.opacity" = "Opacity must be in range of 0...1.0.";
+"ValidationError.colorPalettes" = "At least two ColorPalette must be provided.";

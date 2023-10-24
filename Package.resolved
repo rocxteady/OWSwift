@@ -8,6 +8,24 @@
         "revision" : "67fc1351f0ecc64f29a5c6f42c47f3b173e8240c",
         "version" : "0.0.6"
       }
+    },
+    {
+      "identity" : "swift-syntax",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-syntax.git",
+      "state" : {
+        "revision" : "ffa3cd6fc2aa62adbedd31d3efaf7c0d86a9f029",
+        "version" : "509.0.1"
+      }
+    },
+    {
+      "identity" : "throwpublisher",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/rocxteady/ThrowPublisher.git",
+      "state" : {
+        "revision" : "d26ccbf63edefd1923225a9c0371115a5cc955b0",
+        "version" : "0.0.2"
+      }
     }
   ],
   "version" : 2

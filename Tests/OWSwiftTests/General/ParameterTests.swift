@@ -9,7 +9,6 @@ import XCTest
 @testable import OWSwift
 
 final class ParameterTests: XCTestCase {
-
     override func setUpWithError() throws {
         OWSwift.initialize(with: "hjdf87238jfhjhsh838hsjjdf83ıjdha")
     }
@@ -38,5 +37,4 @@ final class ParameterTests: XCTestCase {
         let createdParameters = try parameters.createParameters()
         XCTAssertEqual(createdParameters["units"] as? String, "imperial", "Parameter don't match!")
     }
-
 }

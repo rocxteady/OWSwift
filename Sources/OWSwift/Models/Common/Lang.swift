@@ -102,7 +102,7 @@ extension Locale {
             return .it
         } else if identifier.hasPrefix("ja") {
             return .ja
-        } else if identifier.hasPrefix("ko-") || identifier == "ko" {
+        } else if identifier.hasPrefix("ko_") || identifier == "ko" {
             return .kr
         } else if identifier.hasPrefix("lv") {
             return .la
@@ -120,7 +120,7 @@ extension Locale {
             return .pt_br
         } else if identifier.hasPrefix("pt") {
             return .pt
-        } else if identifier.hasPrefix("ro-") || identifier == "ro" {
+        } else if identifier.hasPrefix("ro_") || identifier == "ro" {
             return .ro
         } else if identifier.hasPrefix("ru") {
             return .ru
@@ -138,13 +138,13 @@ extension Locale {
             return .th
         } else if identifier.hasPrefix("se") {
             return .sv
-        } else if identifier.hasPrefix("tr-") || identifier == "tr" {
+        } else if identifier.hasPrefix("tr_") || identifier == "tr" {
             return .tr
         } else if identifier.hasPrefix("uk") {
             return .uk
         } else if identifier.hasPrefix("vi") {
             return .vi
-        } else if identifier.starts(with: "zh_Hant") {
+        } else if identifier.starts(with: "zh-Hant") || identifier == "zh_HK" || identifier == "zh_TW" || identifier == "zh_MO" {
             return .zh_tw
         } else if identifier.starts(with: "zh") {
             return .zh_cn

@@ -36,27 +36,28 @@ public struct ForecastRepo {
 }
 
 extension ForecastRepo {
-    private static func createParameters(lat: Double, lon: Double, cnt: Int? = nil, units: Units? = nil, locale: Locale = .current) -> [String: Any?] {
-        return ["lat": lat, "lon": lon, "cnt": cnt, "units": units, "lang": locale.lang?.rawValue]
+    private static func createParameters(lat: Double, lon: Double, cnt: Int? = nil, units: Units? = nil, locale: Locale = .current) -> OptinalParameters {
+        ["lat": lat, "lon": lon, "cnt": cnt, "units": units, "lang": locale.lang?.rawValue]
     }
 
     private static func getForecast(endpoint: Endpoint, lat: Double, lon: Double, cnt: Int? = nil, units: Units? = nil, locale: Locale = .current) async throws -> ForecastResponse {
         let restClient = RestClient.initialize()
         let parameters = try createParameters(lat: lat, lon: lon, cnt: cnt, units: units, locale: locale)
-            .compactMapValues { $0 }
             .createParameters()
         return try await restClient.fetch(with: .init(urlString: endpoint.fullURL, parameters: parameters))
     }
 
     private static func getForecast(endpoint: Endpoint, lat: Double, lon: Double, cnt: Int? = nil, units: Units? = nil, locale: Locale = .current) -> AnyPublisher<ForecastResponse, Error> {
-        return createParameters(lat: lat, lon: lon, cnt: cnt, units: units, locale: locale)
-            .compactMapValues { $0 }
-            .createParametersWithPublisher()
-            .map { parameters -> AnyPublisher<ForecastResponse, Error> in
-                let restClient = RestClient.initialize()
-                return restClient.publisher(with: .init(urlString: endpoint.fullURL, parameters: parameters))
+        Validators.validateLatLon_publisher(lat: lat, lon: lon)
+            .tryMap {
+                return try createParameters(lat: lat, lon: lon, cnt: cnt, units: units, locale: locale)
+                   .createParameters()
             }
-            .switchToLatest()
+            .flatMap { (parameters: Parameters) in
+                let restClient = RestClient.initialize()
+                let publisher:AnyPublisher<ForecastResponse, Error> = restClient.publisher(with: .init(urlString: endpoint.fullURL, parameters: parameters))
+                return publisher.map { $0 }
+            }
             .eraseToAnyPublisher()
     }
 }

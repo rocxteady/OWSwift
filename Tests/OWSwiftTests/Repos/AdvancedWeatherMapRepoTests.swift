@@ -1,8 +1,8 @@
 //
-//  WeatherMapRepoTests.swift
-//  
+//  AdvancedWeatherMapRepoTests.swift
 //
-//  Created by Ulaş Sancak on 18.10.2023.
+//
+//  Created by Ulaş Sancak on 22.10.2023.
 //
 
 import XCTest
@@ -10,7 +10,7 @@ import XCTest
 import Combine
 import SwiftUI
 
-final class WeatherMapRepoTests: XCTestCase {
+final class AdvancedWeatherMapRepoTests: XCTestCase {
     private let configuration = URLSessionConfiguration.default
     private var cancellables = Set<AnyCancellable>()
 
@@ -30,7 +30,7 @@ final class WeatherMapRepoTests: XCTestCase {
             return (response, MockImageDataGenerator.generate())
         }
 
-        let _: Image = try await WeatherMapRepo.getMap(layer: .clouds, zoomLevel: 1, xTile: 1, yTile: 1)
+        let _: Image = try await AdvancedWeatherMapRepo.getMap(layer: .tempAt2, zoomLevel: 1, xTile: 1, yTile: 1, opacity: 1.0, colorPalettes: [.init(value: "0", hex: "FF0000"), .init(value: "10", hex: "00FF00")])
     }
 
     func testGettingMapWithImageWithPublisher() throws {
@@ -39,7 +39,7 @@ final class WeatherMapRepoTests: XCTestCase {
             return (response, MockImageDataGenerator.generate())
         }
 
-        let publisher: AnyPublisher<Image, Error> = WeatherMapRepo.getMap(layer: .clouds, zoomLevel: 1, xTile: 1, yTile: 1)
+        let publisher: AnyPublisher<Image, Error> = AdvancedWeatherMapRepo.getMap(layer: .tempAt2, zoomLevel: 1, xTile: 1, yTile: 1)
 
         let expectation = self.expectation(description: "api")
 
@@ -65,7 +65,7 @@ final class WeatherMapRepoTests: XCTestCase {
         }
 
         do {
-            let _: Image = try await WeatherMapRepo.getMap(layer: .clouds, zoomLevel: 1, xTile: 1, yTile: 1)
+            let _: Image = try await AdvancedWeatherMapRepo.getMap(layer: .tempAt2, zoomLevel: 1, xTile: 1, yTile: 1)
             XCTFail("Image decoding should have been failed!")
         } catch WeatherMapError.imageDecoding {
         } catch {
@@ -79,7 +79,7 @@ final class WeatherMapRepoTests: XCTestCase {
             return (response, nil)
         }
 
-        let publisher: AnyPublisher<Image, Error> = WeatherMapRepo.getMap(layer: .clouds, zoomLevel: 1, xTile: 1, yTile: 1)
+        let publisher: AnyPublisher<Image, Error> = AdvancedWeatherMapRepo.getMap(layer: .tempAt2, zoomLevel: 1, xTile: 1, yTile: 1)
 
         let expectation = self.expectation(description: "api")
 
@@ -102,10 +102,5 @@ final class WeatherMapRepoTests: XCTestCase {
             .store(in: &cancellables)
 
         waitForExpectations(timeout: 0.1)
-    }
-
-    func testErrors() {
-        let imageDecoding = WeatherMapError.imageDecoding
-        XCTAssertNotNil(imageDecoding.errorDescription, "WeatherMapError description should not be nil!")
     }
 }

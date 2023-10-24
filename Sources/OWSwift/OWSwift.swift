@@ -24,11 +24,18 @@ public struct OWSwift {
         }
     }
 
-    public static func initialize(with apiKey: String) {
+    public static func initialize(with apiKey: String, jsonEncoder: JSONEncoder? = nil) {
         Self._apiKey = apiKey
+        if let jsonEncoder {
+            Self.jsonEncoder = jsonEncoder
+        } else {
+            Self.jsonEncoder = .initialize()
+        }
     }
 
     static let sessionConfiguration = URLSessionConfiguration.default
+
+    static private(set) var jsonEncoder: JSONEncoder = .initialize()
 
     static func deIitialize() {
         Self._apiKey = nil
