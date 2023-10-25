@@ -24,6 +24,11 @@ struct Constants {
         struct Image {
             static let fullBaseIMGURL = Constants.baseURL + "/img/wn"
         }
+        struct Geocoding {
+            static let baseAPIURL = "http://api.openweathermap.org/geo"
+            static let version = "1.0"
+            static let fullBaseAPIURL = Self.baseAPIURL + "/" + Self.version
+        }
     }
 }
 

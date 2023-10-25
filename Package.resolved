@@ -23,8 +23,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/rocxteady/ThrowPublisher.git",
       "state" : {
-        "revision" : "d26ccbf63edefd1923225a9c0371115a5cc955b0",
-        "version" : "0.0.2"
+        "revision" : "9fb57ac30acf5a93e2a7ff4721650f33846dd2fb",
+        "version" : "0.0.3"
       }
     }
   ],

@@ -1,0 +1,15 @@
+[
+	{
+		"name": "San Francisco",
+		"local_names": {
+			"te": "శాన్ ఫ్రాన్సిస్కో",
+			"es": "San Francisco",
+			"en": "San Francisco",
+			"yi": "סאן פראנציסקא"
+		},
+		"lat": 37.7790262,
+		"lon": -122.419906,
+		"country": "US",
+		"state": "California"
+	}
+]

@@ -26,3 +26,13 @@ enum ProEndpoint: String {
         return Constants.API.proBaseAPIURL + rawValue
     }
 }
+
+enum GeocodingEndpoint: String {
+    case direct = "/direct"
+    case zip = "/zip"
+    case reverse = "/reverse"
+
+    var fullURL: String {
+        return Constants.API.Geocoding.fullBaseAPIURL + rawValue
+    }
+}

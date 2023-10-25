@@ -15,7 +15,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/rocxteady/Resting.git", .upToNextMajor(from: "0.0.6")),
-        .package(url: "https://github.com/rocxteady/ThrowPublisher.git", .upToNextMajor(from: "0.0.2"))
+        .package(url: "https://github.com/rocxteady/ThrowPublisher.git", .upToNextMajor(from: "0.0.3"))
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
